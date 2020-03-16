@@ -26,7 +26,7 @@ public class Graph {
         });
         int currentNode = 1;
         int[] distances = new int[numOfVertices];
-//        graph.add(new Edge(1,1,0));
+        graph.add(new Edge(1,1,0));
         distanceFinder.addAll(graph);
         for (int i = 0; i < numOfVertices; i++) {
             distances[i] = Integer.MAX_VALUE;
@@ -34,14 +34,20 @@ public class Graph {
         }
         distances[0] = 0;
         while (distanceFinder.size() != 0) {
-            Edge e = distanceFinder.poll();
-            System.out.println(e);
-            distances[e.node2 - 1] = e.cost;
-            settled.set(e.node2 - 1, true);
-            currentNode = e.node2;
+            Edge u = distanceFinder.poll();
+            System.out.println(u);
+//            distances[u.node2 - 1] = u.cost;
+            settled.set(u.node2 - 1, true);
             for (int i = 0; i < graph.size(); i++) {
                 if (graph.get(i).node1 == currentNode) {
-                    distances[graph.get(i).node2 - 1] = Math.min(graph.get(i).cost + distances[graph.get(i).node1 - 1], distances[graph.get(i).node2 - 1]);
+                    System.out.println("Current Node " + currentNode);
+                    if (distances[graph.get(i).node2 - 1] > distances[u.node2 - 1] + graph.get(i).cost) {
+                        distances[graph.get(i).node2 - 1] = Math.min(distances[u.node2 - 1] + graph.get(i).cost, distances[graph.get(i).node2 - 1]);
+                        distanceFinder.add(graph.get(i));
+                        System.out.println("entered");
+
+                    }
+//                    distances[graph.get(i).node2 - 1] = Math.min(graph.get(i).cost + distances[graph.get(i).node1 - 1], distances[graph.get(i).node2 - 1]);
                 }
             }
 
