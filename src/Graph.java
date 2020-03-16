@@ -32,45 +32,32 @@ public class Graph {
             distances[i] = Integer.MAX_VALUE;
             settled.add(false);
         }
-        distanceFinder.size();
-//        distances[0] = 0;
         while (distanceFinder.size() != 0) {
             Edge e = distanceFinder.poll();
             System.out.println(e);
             distances[e.node2 - 1] = e.cost;
             Iterator iter = distanceFinder.iterator();
             settled.set(e.node2 - 1, true);
-//            while (iter.hasNext()) {
-//                Edge nextEdge = (Edge) iter.next();
-//                if (nextEdge.node1 == e.node2) {
-//                    int a = nextEdge.cost + distances[nextEdge.node2];
-//                    if (a < distances[nextEdge.node2]) {
-//                        distances[nextEdge.node2] = a;
-//                    }
-//                }
-//            }
+            while (iter.hasNext()) {
+                Edge nextEdge = (Edge) iter.next();
+                if (nextEdge.node1 == e.node2) {
+                    int a = nextEdge.cost + distances[nextEdge.node2];
+                    if (a < distances[nextEdge.node2]) {
+                        distances[nextEdge.node2] = a;
+                    }
+                }
+            }
         }
         return distances[3];
     }
 
     public static class Edge {
         private int node1, node2, cost;
+
         Edge (int node1, int node2, int cost) {
             this.node1 = node1;
             this.node2 = node2;
             this.cost = cost;
-        }
-
-        public int getNode1() {
-            return node1;
-        }
-
-        public int getNode2() {
-            return node2;
-        }
-
-        public int getCost() {
-            return cost;
         }
 
         @Override

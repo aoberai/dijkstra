@@ -1,0 +1,24 @@
+"You are given N (1 <= N <= 2*10^5) and M bidirectional edges (1 <= M <= 2*10^5). Each edge has a cost, c_i. A path U --> V is defined as a sequence of distinct edges from node U to node V. The cost of a path is defined as the maximum cost over all edges in the path.
+
+Your task is to find a path from node 1 to node N with minimum cost.
+
+Input format:
+The first line will consist of integers N and M.
+The next M lines will consist of 3 integers, u, v, and c, which represents an edge connecting u and v of cost c.
+
+Sample input:
+4 6
+1 2 1
+2 3 1
+3 4 1
+1 2 3
+3 4 2
+1 4 3
+
+Output Format:
+One integer that is the minimum cost of a path from node 1 to node N
+
+Sample Output:
+1
+
+Additional Test Cases (to be added soon): https://drive.google.com/open?id=1cnLAbsd_kKzHnbBz4CwNTIiugT5danOP
