@@ -3,7 +3,7 @@ import java.util.*;
 public class Graph {
 
     private static ArrayList<Edge> graph = new ArrayList<>();
-    private static int numOfVertices = 4;
+    private static int numOfVertices;
 
     public static void main(String[] args) {
         addToGraph(new Edge(3, 4, 1));
@@ -12,16 +12,12 @@ public class Graph {
         addToGraph(new Edge(1, 2, 1));
         addToGraph(new Edge(2, 3, 500));
         addToGraph(new Edge(3, 4, 2));
+        numOfVertices = findNumberOfVertices();
         shortestSubPathInPath();
     }
 
-    public static int[] shortestSubPathInPath() {
-        PriorityQueue<Edge> distanceFinder = new PriorityQueue<>(new Comparator<Edge>() {
-            @Override
-            public int compare(Edge o1, Edge o2) {
-                return o1.cost - o2.cost;
-            }
-        });
+    public static void shortestSubPathInPath() {
+        PriorityQueue<Edge> distanceFinder = new PriorityQueue<>(Comparator.comparingInt(o -> o.cost));
         int currentNode, iterationCount = 0;
         int[] distances = new int[numOfVertices];
         int[] prevDistances = new int[numOfVertices];
@@ -53,7 +49,6 @@ public class Graph {
         parents[0] = -1;
         System.out.println("----------------------");
         printSolution(distances, distances.length, parents);
-        return distances;
     }
 
     public static void printPath(int[] parent, int j) {
@@ -74,6 +69,16 @@ public class Graph {
             printPath(parent, i);
         }
     }
+
+    public static int findNumberOfVertices() {
+        HashSet<Integer> uniqueNumberFinder = new HashSet<Integer>();
+        for (int i = 0; i < graph.size(); i += 2) {
+            uniqueNumberFinder.add(graph.get(i).node1);
+            uniqueNumberFinder.add(graph.get(i).node2);
+        }
+        return uniqueNumberFinder.size();
+    }
+
 
     public static void addToGraph(Edge e) {
         graph.add(e);
