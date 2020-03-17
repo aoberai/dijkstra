@@ -6,12 +6,12 @@ public class Graph {
     private static int numOfVertices = 4;
 
     public static void main(String[] args) {
-        graph.add(new Edge(1, 2, 1));
-        graph.add(new Edge(2, 3, 1));
         graph.add(new Edge(3, 4, 1));
         graph.add(new Edge(1, 2, 3));
-        graph.add(new Edge(3, 4, 2));
         graph.add(new Edge(1, 4, 3));
+        graph.add(new Edge(1, 2, 1));
+        graph.add(new Edge(2, 3, 1));
+        graph.add(new Edge(3, 4, 2));
         graph.toArray();
         System.out.println(Arrays.toString(shortestSubPathInPath()));
     }
@@ -29,31 +29,29 @@ public class Graph {
         graph.add(new Edge(1,1,0));
         distanceFinder.addAll(graph);
         for (int i = 0; i < numOfVertices; i++) {
-            distances[i] = Integer.MAX_VALUE;
+            distances[i] = Integer.MAX_VALUE - 50;
             settled.add(false);
         }
         distances[0] = 0;
         while (distanceFinder.size() != 0) {
             Edge u = distanceFinder.poll();
-            System.out.println(u);
 //            distances[u.node2 - 1] = u.cost;
             settled.set(u.node2 - 1, true);
             for (int i = 0; i < graph.size(); i++) {
                 if (graph.get(i).node1 == currentNode) {
-                    System.out.println("Current Node " + currentNode);
+                    System.out.println(Arrays.toString(distances));
                     if (distances[graph.get(i).node2 - 1] > distances[u.node2 - 1] + graph.get(i).cost) {
                         distances[graph.get(i).node2 - 1] = Math.min(distances[u.node2 - 1] + graph.get(i).cost, distances[graph.get(i).node2 - 1]);
                         distanceFinder.add(graph.get(i));
-                        System.out.println("entered");
-
                     }
-//                    distances[graph.get(i).node2 - 1] = Math.min(graph.get(i).cost + distances[graph.get(i).node1 - 1], distances[graph.get(i).node2 - 1]);
                 }
             }
 
         }
         return distances;
     }
+
+
 
     public static class Edge {
         private int node1, node2, cost;
