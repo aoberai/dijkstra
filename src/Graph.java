@@ -6,12 +6,12 @@ public class Graph {
     private static int numOfVertices = 4;
 
     public static void main(String[] args) {
-        graph.add(new Edge(3, 4, 1));
-        graph.add(new Edge(1, 2, 3));
-        graph.add(new Edge(1, 4, 3));
-        graph.add(new Edge(1, 2, 1));
-        graph.add(new Edge(2, 3, 1));
-        graph.add(new Edge(3, 4, 2));
+        addToGraph(new Edge(3, 4, 1));
+        addToGraph(new Edge(1, 2, 3));
+        addToGraph(new Edge(1, 4, 2));
+        addToGraph(new Edge(1, 2, 1));
+        addToGraph(new Edge(2, 3, 1));
+        addToGraph(new Edge(3, 4, 2));
         System.out.println(Arrays.toString(shortestSubPathInPath()));
     }
 
@@ -19,12 +19,14 @@ public class Graph {
         PriorityQueue<Edge> distanceFinder = new PriorityQueue<>(new Comparator<Edge>() {
             @Override
             public int compare(Edge o1, Edge o2) {
-                return o1.cost-o2.cost;
+                return o1.cost - o2.cost;
             }
         });
-        int currentNode = 1;
+        int currentNode, iterationCount = 0;
         int[] distances = new int[numOfVertices];
-        addToGraph(new Edge(1,1,0));
+        int[] prevDistances = new int[numOfVertices];
+        int[] parents = new int[numOfVertices];
+        addToGraph(new Edge(1, 1, 0));
         distanceFinder.addAll(graph);
         for (int i = 0; i < numOfVertices; i++) {
             distances[i] = Integer.MAX_VALUE - 300;
@@ -33,33 +35,76 @@ public class Graph {
         while (distanceFinder.size() != 0) {
             Edge u = distanceFinder.poll();
             currentNode = u.node1;
-            for (int i = 0; i < graph.size(); i++) {
-                if (graph.get(i).node1 == currentNode) {
-                    System.out.println(Arrays.toString(distances));
-                    System.out.println(graph.get(i));
-                    if (graph.get(i).node1 == 2 & graph.get(i).node2 == 3)
-                        System.out.println(graph.get(i).cost);
-                    if (distances[graph.get(i).node2 - 1] > distances[u.node1 - 1] + graph.get(i).cost) {
-                        System.out.println("entered" + (graph.get(i).node1 - 1));
-                        distances[graph.get(i).node2 - 1] = Math.min(distances[u.node1 - 1] + graph.get(i).cost, distances[graph.get(i).node2 - 1]);
-                        distanceFinder.add(graph.get(i));
-                        distanceFinder.add(new Edge(graph.get(i).node2,graph.get(i).node1, graph.get(i).cost));
+            for (Edge edge : graph) {
+                if (edge.node1 == currentNode) {
+                    if (distances[edge.node2 - 1] > distances[u.node1 - 1] + edge.cost) {
+                        distances[edge.node2 - 1] = distances[u.node1 - 1] + edge.cost;
+                        parents[edge.node2 - 1] = edge.node1;
+                        distanceFinder.add(edge);
+                        distanceFinder.add(new Edge(edge.node2, edge.node1, edge.cost));
                     }
                 }
+                if (!Arrays.equals(prevDistances, distances)) {
+                    System.out.println("Iteration " + (++iterationCount) + ": " + Arrays.toString(distances));
+                }
+                prevDistances = distances.clone();
             }
         }
+        parents[0] = -1;
+        System.out.println("----------------------");
+        printSolution(distances, distances.length,parents);
         return distances;
     }
+    public static void printPath(int parent[], int j)
+    {
+
+        // Base Case : If j is source
+        if (parent[j] == -1)
+            return;
+
+        printPath(parent, parent[j]);
+
+        System.out.println(j);
+    }
+
+    // A utility function to print
+// the constructed distance
+// array
+    public static void printSolution(int dist[], int V,
+                      int parent[])
+    {
+        int src = 0;
+        System.out.println("Vertex\t Distance\tPath");
+        for (int i = 0; i < V; i++)
+        {
+            System.out.printf("\n%d -> %d \t\t %d\t\t%d ",
+                    src, i, dist[i], src);
+            printPath(parent, i);
+        }
+    }
+//
+//    private static void printSubPath(int currentVertex, int[] parents) {
+//        if (parents[currentVertex - 1] == -1) {
+//            return;
+//        }
+//        printSubPath(parents[currentVertex - 1], parents);
+//        System.out.print(currentVertex + " ");
+////        while (currentVertex != -1) {
+////            currentVertex = parents[currentVertex - 1];
+////            System.out.print(currentVertex + " ");
+////        }
+////        System.out.print(currentVertex + " ");
+//    }
 
     public static void addToGraph(Edge e) {
         graph.add(e);
-//        graph.add(new Edge(e.node2, e.node1, e.cost));
+        graph.add(new Edge(e.node2, e.node1, e.cost));
     }
 
     public static class Edge {
         private int node1, node2, cost;
 
-        Edge (int node1, int node2, int cost) {
+        Edge(int node1, int node2, int cost) {
             this.node1 = node1;
             this.node2 = node2;
             this.cost = cost;
