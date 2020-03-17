@@ -12,12 +12,10 @@ public class Graph {
         graph.add(new Edge(1, 2, 1));
         graph.add(new Edge(2, 3, 1));
         graph.add(new Edge(3, 4, 2));
-        graph.toArray();
         System.out.println(Arrays.toString(shortestSubPathInPath()));
     }
 
     public static int[] shortestSubPathInPath() {
-        ArrayList<Boolean> settled = new ArrayList<>();
         PriorityQueue<Edge> distanceFinder = new PriorityQueue<>(new Comparator<Edge>() {
             @Override
             public int compare(Edge o1, Edge o2) {
@@ -26,32 +24,37 @@ public class Graph {
         });
         int currentNode = 1;
         int[] distances = new int[numOfVertices];
-        graph.add(new Edge(1,1,0));
+        addToGraph(new Edge(1,1,0));
         distanceFinder.addAll(graph);
         for (int i = 0; i < numOfVertices; i++) {
-            distances[i] = Integer.MAX_VALUE - 50;
-            settled.add(false);
+            distances[i] = Integer.MAX_VALUE - 300;
         }
         distances[0] = 0;
         while (distanceFinder.size() != 0) {
             Edge u = distanceFinder.poll();
-//            distances[u.node2 - 1] = u.cost;
-            settled.set(u.node2 - 1, true);
+            currentNode = u.node1;
             for (int i = 0; i < graph.size(); i++) {
                 if (graph.get(i).node1 == currentNode) {
                     System.out.println(Arrays.toString(distances));
-                    if (distances[graph.get(i).node2 - 1] > distances[u.node2 - 1] + graph.get(i).cost) {
-                        distances[graph.get(i).node2 - 1] = Math.min(distances[u.node2 - 1] + graph.get(i).cost, distances[graph.get(i).node2 - 1]);
+                    System.out.println(graph.get(i));
+                    if (graph.get(i).node1 == 2 & graph.get(i).node2 == 3)
+                        System.out.println(graph.get(i).cost);
+                    if (distances[graph.get(i).node2 - 1] > distances[u.node1 - 1] + graph.get(i).cost) {
+                        System.out.println("entered" + (graph.get(i).node1 - 1));
+                        distances[graph.get(i).node2 - 1] = Math.min(distances[u.node1 - 1] + graph.get(i).cost, distances[graph.get(i).node2 - 1]);
                         distanceFinder.add(graph.get(i));
+                        distanceFinder.add(new Edge(graph.get(i).node2,graph.get(i).node1, graph.get(i).cost));
                     }
                 }
             }
-
         }
         return distances;
     }
 
-
+    public static void addToGraph(Edge e) {
+        graph.add(e);
+//        graph.add(new Edge(e.node2, e.node1, e.cost));
+    }
 
     public static class Edge {
         private int node1, node2, cost;
