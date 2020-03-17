@@ -10,9 +10,9 @@ public class Graph {
         addToGraph(new Edge(1, 2, 3));
         addToGraph(new Edge(1, 4, 2));
         addToGraph(new Edge(1, 2, 1));
-        addToGraph(new Edge(2, 3, 1));
+        addToGraph(new Edge(2, 3, 500));
         addToGraph(new Edge(3, 4, 2));
-        System.out.println(Arrays.toString(shortestSubPathInPath()));
+        shortestSubPathInPath();
     }
 
     public static int[] shortestSubPathInPath() {
@@ -52,49 +52,28 @@ public class Graph {
         }
         parents[0] = -1;
         System.out.println("----------------------");
-        printSolution(distances, distances.length,parents);
+        printSolution(distances, distances.length, parents);
         return distances;
     }
-    public static void printPath(int parent[], int j)
-    {
 
-        // Base Case : If j is source
-        if (parent[j] == -1)
+    public static void printPath(int[] parent, int j) {
+        if (parent[j - 1] == -1)
             return;
 
-        printPath(parent, parent[j]);
-
-        System.out.println(j);
+        printPath(parent, parent[j - 1]);
+        System.out.print(j + " ");
     }
 
-    // A utility function to print
-// the constructed distance
-// array
-    public static void printSolution(int dist[], int V,
-                      int parent[])
-    {
-        int src = 0;
+    public static void printSolution(int[] dist, int V,
+                                     int[] parent) {
+        int src = 1;
         System.out.println("Vertex\t Distance\tPath");
-        for (int i = 0; i < V; i++)
-        {
+        for (int i = 1; i <= V; i++) {
             System.out.printf("\n%d -> %d \t\t %d\t\t%d ",
-                    src, i, dist[i], src);
+                    src, i, dist[i - 1], src);
             printPath(parent, i);
         }
     }
-//
-//    private static void printSubPath(int currentVertex, int[] parents) {
-//        if (parents[currentVertex - 1] == -1) {
-//            return;
-//        }
-//        printSubPath(parents[currentVertex - 1], parents);
-//        System.out.print(currentVertex + " ");
-////        while (currentVertex != -1) {
-////            currentVertex = parents[currentVertex - 1];
-////            System.out.print(currentVertex + " ");
-////        }
-////        System.out.print(currentVertex + " ");
-//    }
 
     public static void addToGraph(Edge e) {
         graph.add(e);
