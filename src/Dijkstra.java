@@ -100,12 +100,12 @@ public class Dijkstra {
      * @return Number of unique vertices in graph.
      */
     public static int findNumberOfVertices() {
-        HashSet<Integer> uniqueNumberFinder = new HashSet<Integer>();
+        PriorityQueue<Integer> uniqueNumberFinder = new PriorityQueue<>();
         for (int i = 0; i < graph.size(); i += 2) {
             uniqueNumberFinder.add(graph.get(i).node1);
             uniqueNumberFinder.add(graph.get(i).node2);
         }
-        return uniqueNumberFinder.size();
+        return Collections.max(uniqueNumberFinder);
     }
 
     /**
